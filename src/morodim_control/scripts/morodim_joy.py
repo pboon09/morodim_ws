@@ -33,8 +33,6 @@ class JoyMorodimControl(Node):
         self.trajectory_client.wait_for_server()
         self.get_logger().info('Trajectory controller connected!')
         
-        self.prev_buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        
         self.get_logger().info('Joy Morodim Control Node started')
         self.get_logger().info('Controls:')
         self.get_logger().info('- Left stick: Base movement (forward/backward, rotation)')
@@ -50,27 +48,27 @@ class JoyMorodimControl(Node):
         
         joint_changed = False
         
-        # Joint 1 control with D-pad
-        if msg.axes[7] > 0 and self.prev_buttons[7] <= 0:  # D-pad up pressed
+        # Joint 1 D-pad
+        if msg.axes[7] > 0:  # D-pad up
             self.joint_positions[0] += self.joint_step
             joint_changed = True
-        elif msg.axes[7] < 0 and self.prev_buttons[7] >= 0:  # D-pad down pressed
+        elif msg.axes[7] < 0:  # D-pad down
             self.joint_positions[0] -= self.joint_step
             joint_changed = True
         
-        # Joint 2 control with buttons (Y/A or Triangle/X)
-        if msg.buttons[3] == 1 and self.prev_buttons[3] == 0:  # Y/Triangle pressed
+        # Joint 2 Triangle / X
+        if msg.buttons[2] == 1:  # Triangle
             self.joint_positions[1] += self.joint_step
             joint_changed = True
-        elif msg.buttons[0] == 1 and self.prev_buttons[0] == 0:  # A/X pressed
+        elif msg.buttons[0] == 1:  # X
             self.joint_positions[1] -= self.joint_step
             joint_changed = True
         
-        # Joint 3 control with bumpers
-        if msg.buttons[4] == 1 and self.prev_buttons[4] == 0:  # LB pressed
+        # Joint 3 LB / RB
+        if msg.buttons[4] == 1:  # LB
             self.joint_positions[2] -= self.joint_step
             joint_changed = True
-        elif msg.buttons[5] == 1 and self.prev_buttons[5] == 0:  # RB pressed
+        elif msg.buttons[5] == 1:  # RB
             self.joint_positions[2] += self.joint_step
             joint_changed = True
         
