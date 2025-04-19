@@ -1,9 +1,7 @@
 # Morodim
 This package provides a ROS2 implementation for a mobile manipulator robot that combines a MiR100 mobile base with a 3-DOF manipulator arm. It includes URDF models, controllers, launch files, and a joystick interface for controlling both the mobile base and the robotic arm.
 
-![](video/morodimv1.mp4)
-
-## Featuresd
+## Features
 - Complete URDF model integrating MiR100 mobile base with a custom 3-DOF manipulator
 - ROS2 controllers for both differential drive (mobile base) and position control (manipulator)
 - Joystick control interface for simultaneous operation of the mobile base and manipulator
