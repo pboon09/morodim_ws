@@ -2,17 +2,14 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="morodim">
 
-  <!-- MiR100 base includes -->
   <xacro:include filename="$(find mir_description)/urdf/include/mir_100_v1.urdf.xacro" />
   <xacro:include filename="$(find mir_description)/urdf/include/common.gazebo.xacro" />
   <xacro:include filename="$(find mir_description)/urdf/include/mir_100.gazebo.xacro" />
   
-  <!-- My-robot-to-mono includes -->
   <xacro:include filename="inertial_macros.xacro"/>
 
   <xacro:arg name="tf_prefix" default="" />
 
-  <!-- prefix can not start with a slash like a global namespace! results in TF errors -->
   <xacro:property name="ns" value="$(arg tf_prefix)" />
   <xacro:if value="${ns == ''}">
     <xacro:property name="prefix" value="" />
@@ -21,18 +18,14 @@
     <xacro:property name="prefix" value="${ns}/" />
   </xacro:unless>
 
-  <!-- MiR 100 Robot (with velocity control) -->
   <xacro:mir_100 prefix="${prefix}" ns="${ns}"/>
 
-  <!-- Use the original MiR differential drive controller -->
   <xacro:diff_controller_plugin_gazebo prefix="${prefix}" ns="${ns}"
     left_wheel_joint="${prefix}left_wheel_joint"
     right_wheel_joint="${prefix}right_wheel_joint"
     wheel_separation="${2*mir_100_act_wheel_dy}"
     wheel_radius="${mir_100_act_wheel_radius}"/>
     
-  <!-- My robot (with position control) - attached to the MiR surface -->
-  <!-- Links and joints from my-robot-to-mono.xacro -->
   <link name="link_0">
     <visual>
       <geometry>
@@ -168,12 +161,10 @@
     <origin xyz="0.0 -0.28 0.0" rpy="${3.14/2} 0 0"/> 
   </joint>
 
-  <!-- Position control for the robot joints - manipulator only -->
   <ros2_control name="GazeboSystem" type="system">
     <hardware>
       <plugin>gazebo_ros2_control/GazeboSystem</plugin>
     </hardware>
-    <!-- Manipulator joints only - NO wheel joints -->
     <joint name="joint_1">
       <command_interface name="position">
         <param name="min">-3.14</param>
@@ -209,7 +200,6 @@
     </joint>
   </ros2_control>
 
-  <!-- Gazebo plugin for the robot -->
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
       <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
@@ -217,7 +207,6 @@
     </plugin>
   </gazebo>
 
-  <!-- Gazebo material properties for the robot links -->
   <gazebo reference="link_0">
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
